@@ -19,15 +19,22 @@ namespace web_api_gyak.Controllers
 
         // GET api/<JokeController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            FunnyDatabaseContext context = new FunnyDatabaseContext();
+            var keresettVicc = (from x in context.Jokes
+                                where x.JokeSk == id
+                                select x).FirstOrDefault();
+            return Ok(keresettVicc);
         }
 
-        // POST api/<JokeController>
+        // POST api/jokes
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Joke újVicc)
         {
+            FunnyDatabaseContext context = new FunnyDatabaseContext();
+            context.Jokes.Add(újVicc);
+            context.SaveChanges();
         }
 
         // PUT api/<JokeController>/5
